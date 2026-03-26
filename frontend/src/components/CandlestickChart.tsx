@@ -86,7 +86,9 @@ export default function CandlestickChart({ data }: { data: PricePoint[] }) {
       lastValueVisible: false,
     });
     sma20Series.setData(
-      sma20.map((val, i) => ({ time: data[i].time, value: val })).filter((d) => d.value !== null) as any
+      sma20
+        .map((val, i) => ({ time: data[i].time, value: val }))
+        .filter((d): d is { time: string; value: number } => d.value !== null)
     );
 
     const sma50 = computeSMA(data.map((d) => d.close), 50);
@@ -98,7 +100,9 @@ export default function CandlestickChart({ data }: { data: PricePoint[] }) {
       lastValueVisible: false,
     });
     sma50Series.setData(
-      sma50.map((val, i) => ({ time: data[i].time, value: val })).filter((d) => d.value !== null) as any
+      sma50
+        .map((val, i) => ({ time: data[i].time, value: val }))
+        .filter((d): d is { time: string; value: number } => d.value !== null)
     );
 
     chart.timeScale().fitContent();

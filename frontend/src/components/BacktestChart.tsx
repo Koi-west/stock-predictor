@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  AreaChart,
   Area,
   XAxis,
   YAxis,
@@ -50,10 +49,19 @@ export default function BacktestChart({ curve }: { curve: CurvePoint[] }) {
               fontSize: "12px",
               color: "#888888",
             }}
-            formatter={(value: number, name: string) => [
-              `${value.toFixed(2)}%`,
-              name === "strategy" ? "ML 策略" : "买入持有",
-            ]}
+            formatter={(value, name) => {
+              const label = name === "strategy" ? "ML 策略" : "买入持有";
+              const num =
+                typeof value === "number"
+                  ? value
+                  : typeof value === "string"
+                    ? Number(value)
+                    : Array.isArray(value) && typeof value[0] === "number"
+                      ? value[0]
+                      : null;
+
+              return [num === null || Number.isNaN(num) ? String(value ?? "") : `${num.toFixed(2)}%`, label];
+            }}
           />
           <ReferenceLine y={0} stroke="#222222" strokeDasharray="4 4" />
           <Area

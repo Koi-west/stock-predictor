@@ -104,8 +104,9 @@ export default function Home() {
       setMetrics(met);
       setFeatures(feat);
       setBacktest(bt);
-    } catch (e: any) {
-      if (e.message?.includes("404")) {
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      if (message.includes("404")) {
         setError("请先训练模型");
         setModelTrained(false);
       } else {

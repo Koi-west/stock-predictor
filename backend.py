@@ -28,14 +28,20 @@ log = logging.getLogger("uvicorn")
 
 @app.on_event("startup")
 def refresh_data_on_startup():
-    """Fetch latest market data for all symbols on server start."""
+    """Refresh market data in the background so the API can start immediately."""
+    import threading
+
     all_tickers = SYMBOLS + list(MACRO_TICKERS.values())
-    for ticker in all_tickers:
-        try:
-            fetch_symbol(ticker)
-            log.info(f"Refreshed {ticker}")
-        except Exception as e:
-            log.warning(f"Failed to refresh {ticker}: {e}")
+
+    def _refresh():
+        for ticker in all_tickers:
+            try:
+                fetch_symbol(ticker)
+                log.info(f"Refreshed {ticker}")
+            except Exception as e:
+                log.warning(f"Failed to refresh {ticker}: {e}")
+
+    threading.Thread(target=_refresh, name="refresh-data", daemon=True).start()
 
 
 # ── Helpers ─────────────────────────────────────────────
