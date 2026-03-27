@@ -2,7 +2,8 @@
 
 @font-face {
   font-family: 'KingHwa OldSong';
-  src: url('/fonts/KingHwa_OldSong.ttf') format('truetype');
+  src: url('/fonts/KingHwa_OldSong.woff2') format('woff2'),
+       url('/fonts/KingHwa_OldSong.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
